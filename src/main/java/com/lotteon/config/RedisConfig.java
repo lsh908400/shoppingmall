@@ -8,12 +8,14 @@ import com.lotteon.dto.responseDto.GetCategoryDto;
 import com.lotteon.dto.responseDto.GetMainProductDto;
 import com.lotteon.repository.impl.token.PersistentRememberMeTokenDeserializer;
 import com.lotteon.repository.impl.token.PersistentRememberMeTokenSerializer;
+import io.lettuce.core.RedisURI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
@@ -29,14 +31,22 @@ import java.util.List;
 @Configuration
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String host;
-    @Value("${spring.data.redis.port}")
-    private int port;
+    @Value("${spring.data.redis.url}")
+    private String redisUrl;
 
     @Bean
-    public RedisConnectionFactory getConnectionFactory() {
-        return new LettuceConnectionFactory(host, port);
+    public LettuceConnectionFactory redisConnectionFactory() {
+        // RedisURI를 사용해 URL 파싱
+        RedisURI redisURI = RedisURI.create(redisUrl);
+
+        // RedisStandaloneConfiguration에 설정
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setHostName(redisURI.getHost());
+        redisStandaloneConfiguration.setPort(redisURI.getPort());
+        redisStandaloneConfiguration.setPassword(redisURI.getPassword());
+
+        // LettuceConnectionFactory 생성
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
@@ -92,7 +102,7 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, List<GetCategoryDto>> getCategoryRedisTemplate() {
         RedisTemplate<String, List<GetCategoryDto>> template = new RedisTemplate<>();
-        template.setConnectionFactory(getConnectionFactory());
+        template.setConnectionFactory(redisConnectionFactory());
         template.setDefaultSerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
