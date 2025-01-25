@@ -1,6 +1,7 @@
 <img align="center" width="100%" alt="header:Lotteon" src="https://capsule-render.vercel.app/api?type=waving&height=150&color=0:e99ab5,100:f9cad4&text=Lotte%20ON&desc=Team%202%20Project&descAlign=41&descAlignY=34&fontColor=E60029&reversal=false&animation=fadeIn&fontAlignY=64&section=header">
 
-
+## 시연영상
+[![Video Label](http://img.youtube.com/vi/rM2Cj0PMg1Q/0.jpg)]
 ## 프로젝트 개요
 롯데이커머스의 웹 쇼핑몰 프로젝트 **Lotte On**은 고객에게 다양한 상품을 제공하고 최고의 쇼핑 경험을 제공하기 위해 개발되고 있는 온라인 플랫폼입니다. 본 프로젝트는 사용자 친화적인 인터페이스를 통해 쇼핑이 보다 쉽고 편리하게 이루어질 수 있도록 설계되었습니다.
 
